@@ -25,15 +25,30 @@ class PlaylistViewSet(viewsets.ModelViewSet):
     search_fields = ('titulo',)
 
 
-@api_view(['POST'])
-def add_music(request, id_playlist, id_musica):
+@api_view(['GET'])
+def add_music(request, id_playlist, id_music):
     '''
     Adiciona uma música a playlist informada.
     '''
     playlist = get_object_or_404(Playlist, pk=id_playlist)
-    musica = get_object_or_404(Musica, pk=id_musica)
-    
-    playlist.musicas.add(musica).save()
+    musica = get_object_or_404(Musica, pk=id_music)
+
+    playlist.musicas.add(musica)
+
+    playlist.save()
 
     serializer = PlaylistSerializer(playlist)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def lista_musicas_da_playlist(request, id_playlist):
+    '''
+    Lista todas as musicas de uma playlist.
+    '''
+    playlist = get_object_or_404(Playlist, pk=id_playlist)
+    
+    musicas = playlist.musicas.all()
+
+    serializer = MusicaSerializer(musicas, many=True)
     return Response(serializer.data)

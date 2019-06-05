@@ -18,7 +18,7 @@ from django.urls import path
 from django.conf.urls import url, include
 from rest_framework import routers
 
-from musicas.views import MusicaViewSet, PlaylistViewSet, add_music
+from musicas.views import MusicaViewSet, PlaylistViewSet, add_music, lista_musicas_da_playlist
 
 router = routers.DefaultRouter()
 router.register(r'musicas', MusicaViewSet)
@@ -27,4 +27,6 @@ router.register(r'playlist', PlaylistViewSet)
 urlpatterns = [
     url(r'^api/', include(router.urls)),
     path('admin/', admin.site.urls),
+    url(r'^api/playlist/(?P<id_playlist>\d+)/add/(?P<id_music>\d+)/$', add_music),
+    url(r'^api/playlist/(?P<id_playlist>\d+)/musicas/$', lista_musicas_da_playlist)
 ]
